@@ -6,7 +6,8 @@ An interactive Q&A web application that leverages LLM integration to answer user
 
 ### Backend
 - Python with FastAPI
-- LLM Integration (Gemini)
+- LLM Integration Choose one from (ChatGPT, DeepSeek, Gemini, or Claude) - Free tier only (I've made of Gemini in this project.)
+
 
 ### Frontend
 - Next.js
