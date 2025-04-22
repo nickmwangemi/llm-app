@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface AnswerDisplayProps {
   question: string;
@@ -6,34 +9,6 @@ interface AnswerDisplayProps {
 }
 
 export default function AnswerDisplay({ question, answer }: AnswerDisplayProps) {
-  // Function to format the answer with markdown-like formatting
-  const formatAnswer = (text: string) => {
-    return text.split('\n').map((paragraph, i) => {
-      // Check if the paragraph is a header
-      if (paragraph.startsWith('# ')) {
-        return <h1 key={i} className="text-2xl font-bold my-4">{paragraph.substring(2)}</h1>;
-      }
-      if (paragraph.startsWith('## ')) {
-        return <h2 key={i} className="text-xl font-bold my-3">{paragraph.substring(3)}</h2>;
-      }
-      if (paragraph.startsWith('### ')) {
-        return <h3 key={i} className="text-lg font-bold my-2">{paragraph.substring(4)}</h3>;
-      }
-
-      // Check if paragraph is a list item
-      if (paragraph.startsWith('- ')) {
-        return <li key={i} className="ml-6 my-1">{paragraph.substring(2)}</li>;
-      }
-
-      // Regular paragraph
-      if (paragraph.trim() !== '') {
-        return <p key={i} className="my-4">{paragraph}</p>;
-      }
-
-      return null;
-    });
-  };
-
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
       <div className="mb-4 pb-4 border-b border-gray-200">
@@ -43,7 +18,29 @@ export default function AnswerDisplay({ question, answer }: AnswerDisplayProps) 
       <div>
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Answer:</h2>
         <div className="prose max-w-none text-gray-700">
-          {formatAnswer(answer)}
+          <ReactMarkdown
+            components={{
+              code({node, inline, className, children, ...props}) {
+                const match = /language-(\w+)/.exec(className || '');
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    style={atomDark}
+                    language={match[1]}
+                    PreTag="div"
+                    {...props}
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              }
+            }}
+          >
+            {answer}
+          </ReactMarkdown>
         </div>
       </div>
     </div>
