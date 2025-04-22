@@ -84,22 +84,23 @@ This application uses [Gemini](https://gemini.google.com/) for generating respon
 - User-friendly interface for submitting questions
 - Real-time AI-generated responses
 - Responsive design for all device sizes
-- Loading states for better user experience
+- Loading states for better user-experience
+- Makes use of local storage to persist recently asked questions
 
 ## Screenshots
 User Query: "What documents do I need to travel from Kenya to Ireland?"
-![Kenya-to-Ireland](assets/Screenshot%20from%202025-04-22%2015-57-13.png)
-![Kenya-to-Ireland](assets/Screenshot%20from%202025-04-22%2015-57-30.png)
+![Kenya-to-Ireland](assets/Screenshot%20from%202025-04-22%2022-42-33.png)
+![Kenya-to-Ireland](assets/Screenshot%20from%202025-04-22%2022-43-44.png)
 
 
 User Query: "What are the visa requirements for traveling to the USA from Kenya?"
-![Kenya-to-USA](assets/Screenshot%20from%202025-04-22%2015-57-41.png)
+![Kenya-to-USA](assets/Screenshot%20from%202025-04-22%2022-43-47.png)
 
 User Query: "What is the best time to visit France?"
-![Kenya-to-France](assets/Screenshot%20from%202025-04-22%2015-58-19.png)
+![Kenya-to-France](assets/Screenshot%20from%202025-04-22%2022-44-09.png)
 
 User Query: "What should I pack for a trip to Japan in December?"
-![Kenya-to-Japan](assets/Screenshot%20from%202025-04-22%2015-58-00.png)
+![Kenya-to-Japan](assets/Screenshot%20from%202025-04-22%2022-44-36.png)
 
 ## Recent Questions
-![Recent-Questions](assets/Screenshot%20from%202025-04-22%2015-58-24.png)
+![Recent-Questions](assets/Screenshot%20from%202025-04-22%2022-44-45.png)
