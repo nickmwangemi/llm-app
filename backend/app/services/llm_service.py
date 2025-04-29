@@ -36,7 +36,7 @@ async def get_llm_response(question: str) -> str:
         result = response.json()
         try:
             return result["candidates"][0]["content"]["parts"][0]["text"]
-        except (KeyError, IndexError):
+        except (KeyError, IndexError) as e:
             raise Exception(
                 f"Unexpected response format: {json.dumps(result, indent=2)}"
-            )
+            ) from e

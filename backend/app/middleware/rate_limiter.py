@@ -28,7 +28,7 @@ class RateLimiter(BaseHTTPMiddleware):
 		# Only rate limit API routes
 		if request.url.path.startswith("/api/qa"):
 			# Check if client has exceeded rate limit
-			if self._is_rate_limited(client_ip):
+			if self.is_rate_limited(client_ip):
 				return Response(
 					content="Rate limit exceeded. Please try again later.",
 					status_code=429,
@@ -36,32 +36,32 @@ class RateLimiter(BaseHTTPMiddleware):
 				)
 
 			# Record this request
-			self._record_request(client_ip)
+			self.record_request(client_ip)
 
 		# Process the request
 		response = await call_next(request)
 
 		# Add rate limit headers for API routes
 		if request.url.path.startswith("/api/"):
-			remaining = self._get_remaining_requests(client_ip)
+			remaining = self.get_remaining_requests(client_ip)
 			response.headers["X-RateLimit-Limit"] = str(self.requests_limit)
 			response.headers["X-RateLimit-Remaining"] = str(remaining)
 			response.headers["X-RateLimit-Reset"] = str(int(time.time() + self.period))
 
 		return response
 
-	def _is_rate_limited(self, client_ip: str) -> bool:
+	def is_rate_limited(self, client_ip: str) -> bool:
 		"""Check if the client has exceeded their rate limit."""
 		if client_ip not in self.request_history:
 			return False
 
 		# Clean old requests
-		self._clean_old_requests(client_ip)
+		self.clean_old_requests(client_ip)
 
 		# Check against limit
 		return len(self.request_history[client_ip]) >= self.requests_limit
 
-	def _record_request(self, client_ip: str) -> None:
+	def record_request(self, client_ip: str) -> None:
 		"""Record a request for the client."""
 		current_time = time.time()
 
@@ -70,7 +70,7 @@ class RateLimiter(BaseHTTPMiddleware):
 
 		self.request_history[client_ip].append(current_time)
 
-	def _clean_old_requests(self, client_ip: str) -> None:
+	def clean_old_requests(self, client_ip: str) -> None:
 		"""Clean requests older than the rate limit period."""
 		if client_ip not in self.request_history:
 			return
@@ -83,10 +83,10 @@ class RateLimiter(BaseHTTPMiddleware):
 			if req_time > cut_off
 		]
 
-	def _get_remaining_requests(self, client_ip: str) -> int:
+	def get_remaining_requests(self, client_ip: str) -> int:
 		"""Get the number of remaining requests for the client."""
 		if client_ip not in self.request_history:
 			return self.requests_limit
 
-		self._clean_old_requests(client_ip)
+		self.clean_old_requests(client_ip)
 		return max(0, self.requests_limit - len(self.request_history[client_ip]))
